@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
 # bin/compile <build-dir> <cache-dir> <env-dir>
 
+#tell me about the machine that is being used to compile
+cat /proc/meminfo
+
 # fail fast
 set -e
 
@@ -75,19 +78,19 @@ for DIR in $CACHED_DIRS; do
 done
 
 # these are preliminary checks. actual version check happens below when attempting to download sbt boot.properties
-if ! test -e project/build.properties; then
-	echo " !      Error, your scala project must include project/build.properties and define sbt.version"
-	echo " !      You must use a release verison of sbt, sbt.version=0.11.0 or greater"
-        exit 1
-fi
+#if ! test -e project/build.properties; then
+#	echo " !      Error, your scala project must include project/build.properties and define sbt.version"
+#	echo " !      You must use a release verison of sbt, sbt.version=0.11.0 or greater"
+#        exit 1
+#fi
 
-if ! has_supported_sbt_version ${BUILD_DIR}; then
-	echo " !      Error, you have defined an unsupported sbt.version in project/build.properties"
-	echo " !      You must use a release verison of sbt, sbt.version=0.11.0 or greater"
-	exit 1
-fi
+#if ! has_supported_sbt_version ${BUILD_DIR}; then
+#	echo " !      Error, you have defined an unsupported sbt.version in project/build.properties"
+#	echo " !      You must use a release verison of sbt, sbt.version=0.11.0 or greater"
+#	exit 1
+#fi
  
-SBT_VERSION="$(get_supported_sbt_version ${BUILD_DIR})"
+#SBT_VERSION="$(get_supported_sbt_version ${BUILD_DIR})"
 SBT_JAR="sbt-launch.jar"
 SBT_URL="http://typesafe.artifactoryonline.com/typesafe/ivy-releases/org.scala-sbt/sbt-launch/0.13.2-M1/$SBT_JAR"
 ## in 0.10 start-script will depend on package, if packaging
