@@ -2,7 +2,7 @@
 # bin/compile <build-dir> <cache-dir> <env-dir>
 
 log_echo() { 
-  echo $(date +%Y%m%d_%H%M%S_%N | sed 's,.\{6\}$,,') "$@";
+  echo $(date %H:%M:%S.%N | sed 's,.\{6\}$,,') "$@";
 }
 
 # fail fast
