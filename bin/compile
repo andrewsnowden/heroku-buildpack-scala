@@ -20,7 +20,7 @@ mv $APP_BUILD_DIR $BUILD_DIR
 
 curl --silent --location http://heroku-jvm-common.s3.amazonaws.com/jvm-buildpack-common.tar.gz | tar xz
 . bin/util
-. bin/java
+#. bin/java
 
 export_env_dir $ENV_DIR
 
@@ -33,11 +33,28 @@ if [ ! -f ${BUILD_DIR}/system.properties ]; then
 fi
 
 # install JDK 
-javaVersion=$(detect_java_version ${BUILD_DIR})
-echo -n "-----> Installing OpenJDK ${javaVersion}..."
-install_java ${BUILD_DIR} ${javaVersion}
-jdk_overlay ${BUILD_DIR}
-echo "done"
+#javaVersion=$(detect_java_version ${BUILD_DIR})
+#echo -n "-----> Installing OpenJDK ${javaVersion}..."
+#install_java ${BUILD_DIR} ${javaVersion}
+#jdk_overlay ${BUILD_DIR}
+#echo "done"
+
+# install JDK - oracle
+. $BIN_DIR/../lib/utils
+
+statusn "Installing wget..."
+install_wget $CACHE_DIR
+echo " version $(wget_version) installed"
+
+statusn "Installing JDK..."
+install_java $CACHE_DIR $BUILD_DIR
+echo " version $(java_version) installed"
+
+if [ "true" == $JCE ]; then
+  statusn "Installing JCE Unlimited Strength..."
+  install_jce
+  echo " done"
+fi
 
 # home directory from perspective of SBT; we rename
 # it because otherwise the project root and $HOME
@@ -72,7 +89,7 @@ fi
  
 SBT_VERSION="$(get_supported_sbt_version ${BUILD_DIR})"
 SBT_JAR="sbt-launch.jar"
-SBT_URL="http://typesafe.artifactoryonline.com/typesafe/ivy-releases/org.scala-sbt/sbt-launch/0.13.5/$SBT_JAR"
+SBT_URL="http://typesafe.artifactoryonline.com/typesafe/ivy-releases/org.scala-sbt/sbt-launch/0.13.2-M1/$SBT_JAR"
 ## in 0.10 start-script will depend on package, if packaging
 ## is required - it may not be, we can run .class files or a package-war
 ## instead.
