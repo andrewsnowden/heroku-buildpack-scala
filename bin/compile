@@ -149,7 +149,7 @@ cp -p $OPT_DIR/$HEROKU_PLUGIN $SBT_USER_HOME/.sbt/plugins/$HEROKU_PLUGIN
 /bin/mv $BUILD_DIR/deploy $BUILD_DIR/target
 
 echo $HOME
-ls $HOME/.heroku
+ls -a $HOME/
 
 set-env PATH '$HOME/.heroku/python/bin:$PATH'
 /app/.heroku/python/bin/python project/wercker/manage-dependencies.py download $BUILD_DIR/target/universal/stage/lib
