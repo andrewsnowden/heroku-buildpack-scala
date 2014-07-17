@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # bin/compile <build-dir> <cache-dir> <env-dir>
 
-log_echo() { 
+log_echo() {
   echo $(date +%H:%M:%S.%N | sed 's,.\{6\}$,,') "$@";
 }
 
@@ -35,12 +35,12 @@ export_env_dir $ENV_DIR
 #create the cache dir if it doesn't exist
 mkdir -p $CACHE_DIR
 
-# create default system.properties 
+# create default system.properties
 if [ ! -f ${BUILD_DIR}/system.properties ]; then
   log_echo "java.runtime.version=1.6" > ${BUILD_DIR}/system.properties
 fi
 
-# install JDK 
+# install JDK
 . bin/java
 javaVersion=$(detect_java_version ${BUILD_DIR})
 log_echo -n "-----> Installing OpenJDK ${javaVersion}..."
@@ -95,7 +95,7 @@ if ! has_supported_sbt_version ${BUILD_DIR}; then
 	log_echo " !      You must use a release verison of sbt, sbt.version=0.11.0 or greater"
 	exit 1
 fi
- 
+
 SBT_VERSION="$(get_supported_sbt_version ${BUILD_DIR})"
 SBT_JAR="sbt-launch.jar"
 SBT_URL="http://typesafe.artifactoryonline.com/typesafe/ivy-releases/org.scala-sbt/sbt-launch/0.13.2/$SBT_JAR"
@@ -148,10 +148,12 @@ cp -p $OPT_DIR/$HEROKU_PLUGIN $SBT_USER_HOME/.sbt/plugins/$HEROKU_PLUGIN
 /bin/rm -rf $BUILD_DIR/target
 /bin/mv $BUILD_DIR/deploy $BUILD_DIR/target
 
-ls $HOME/bin
-
+log_echo 'Attemptint to install python'
+curl http://envy-versions.s3.amazonaws.com/python-2.7.8.tar.bz2 -s | tar jx &> /dev/null
+mv python .heroku/python
 set-env PATH '$HOME/.heroku/python/bin:$PATH'
-$HOME/bin/python project/wercker/manage-dependencies.py download $BUILD_DIR/target/universal/stage/lib
+python project/wercker/get-pip.py
+python project/wercker/manage-dependencies.py download $BUILD_DIR/target/universal/stage/lib
 
 PROFILE_PATH="$BUILD_DIR/.profile.d/scala.sh"
 mkdir -p $(dirname $PROFILE_PATH)
