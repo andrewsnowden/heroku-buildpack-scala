@@ -148,8 +148,9 @@ cp -p $OPT_DIR/$HEROKU_PLUGIN $SBT_USER_HOME/.sbt/plugins/$HEROKU_PLUGIN
 /bin/rm -rf $BUILD_DIR/target
 /bin/mv $BUILD_DIR/deploy $BUILD_DIR/target
 
+ls /app/.heroku/python/lib/python2.7/site-packages
 set-env PATH '$HOME/.heroku/python/bin:$PATH'
-project/wercker/manage-dependencies.py download $BUILD_DIR/target/universal/stage/lib
+/app/.heroku/python/bin/python project/wercker/manage-dependencies.py download $BUILD_DIR/target/universal/stage/lib
 
 PROFILE_PATH="$BUILD_DIR/.profile.d/scala.sh"
 mkdir -p $(dirname $PROFILE_PATH)
