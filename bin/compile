@@ -150,6 +150,8 @@ cp -p $OPT_DIR/$HEROKU_PLUGIN $SBT_USER_HOME/.sbt/plugins/$HEROKU_PLUGIN
 
 log_echo 'Attempting to install python'
 mkdir .heroku
+ls -la
+log_echo 'Installing Python'
 curl http://lang-python.s3.amazonaws.com/runtimes/python-2.7.8.tar.gz -s | tar zxv -C .heroku/python
 log_echo 'Moving python'
 set-env PATH '$HOME/.heroku/python/bin:$PATH'
