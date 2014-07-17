@@ -149,10 +149,9 @@ cp -p $OPT_DIR/$HEROKU_PLUGIN $SBT_USER_HOME/.sbt/plugins/$HEROKU_PLUGIN
 /bin/mv $BUILD_DIR/deploy $BUILD_DIR/target
 
 log_echo 'Attempting to install python'
-curl http://envy-versions.s3.amazonaws.com/python-2.7.8.tar.bz2 -s | tar jx &> /dev/null
-log_echo 'Moving python'
 mkdir .heroku
-mv python .heroku/python
+curl http://lang-python.s3.amazonaws.com/runtimes/python-2.7.8.tar.gz -s | tar zxv -C .heroku/python
+log_echo 'Moving python'
 set-env PATH '$HOME/.heroku/python/bin:$PATH'
 python project/wercker/get-pip.py
 python project/wercker/manage-dependencies.py download $BUILD_DIR/target/universal/stage/lib
