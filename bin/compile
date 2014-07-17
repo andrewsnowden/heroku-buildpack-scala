@@ -5,6 +5,11 @@ log_echo() {
   echo $(date +%H:%M:%S.%N | sed 's,.\{6\}$,,') "$@";
 }
 
+# Usage: $ set-env key value
+set-env() {
+  echo "export $1=$2" >> $PROFILE_PATH
+}
+
 # fail fast
 set -e
 
