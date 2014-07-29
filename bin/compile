@@ -41,29 +41,29 @@ if [ ! -f ${BUILD_DIR}/system.properties ]; then
 fi
 
 # install JDK
-. bin/java
-javaVersion=$(detect_java_version ${BUILD_DIR})
-log_echo -n "-----> Installing OpenJDK ${javaVersion}..."
-install_java ${BUILD_DIR} ${javaVersion}
-jdk_overlay ${BUILD_DIR}
-log_echo "done"
+# . bin/java
+# javaVersion=$(detect_java_version ${BUILD_DIR})
+# log_echo -n "-----> Installing OpenJDK ${javaVersion}..."
+# install_java ${BUILD_DIR} ${javaVersion}
+# jdk_overlay ${BUILD_DIR}
+# log_echo "done"
 
 # install JDK - oracle
-#. $BIN_DIR/../lib/utils
+. $BIN_DIR/../lib/utils
 
-#statusn "Installing wget..."
-#install_wget $CACHE_DIR
-#log_echo " version $(wget_version) installed"
+statusn "Installing wget..."
+install_wget $CACHE_DIR
+log_echo " version $(wget_version) installed"
 
-#statusn "Installing JDK..."
-#install_java $CACHE_DIR $BUILD_DIR
-#log_echo " version $(java_version) installed"
+statusn "Installing JDK..."
+install_java $CACHE_DIR $BUILD_DIR
+log_echo " version $(java_version) installed"
 
-#if [ "true" == "$JCE" ]; then
-#  statusn "Installing JCE Unlimited Strength..."
-#  install_jce
-#  log_echo " done"
-#fi
+if [ "true" == "$JCE" ]; then
+ statusn "Installing JCE Unlimited Strength..."
+ install_jce
+ log_echo " done"
+fi
 
 # home directory from perspective of SBT; we rename
 # it because otherwise the project root and $HOME

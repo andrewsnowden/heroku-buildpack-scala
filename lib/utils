@@ -52,23 +52,23 @@ install_wget() {
   cache_dir=$1
   wget_url=${2:-"http://ftp.gnu.org/gnu/wget/wget-1.15.tar.gz"}
   wget_ver=${3:-"1.15"}
-  
+
   if [ ! -d "${cache_dir}" ]; then error "Invalid cache directory to store wget."; fi
-  
+
   if [ ! -f "${cache_dir}/.tools/wget/bin/wget" ] || [ "${wget_ver}" != "$(wget_version ${cache_dir}/.tools/wget/bin/)" ]; then
     echo -n " (downloading...)"
     rm -rf "${cache_dir}/.tools/wget" && mkdir -p "${cache_dir}/.tools/wget"
-  
+
     cd $(mktmpdir wget)
     curl --silent "${wget_url}" | tar xz --strip-components=1
     ./configure --silent --prefix=${cache_dir}/.tools/wget --with-ssl=openssl >/dev/null 2>&1
     make --silent >/dev/null 2>&1 && make --silent install >/dev/null 2>&1
   fi
-  
+
   if [ ! -f "${cache_dir}/.tools/wget/bin/wget" ]; then
     error "Unable to install wget."
   fi
-  
+
   export PATH="${cache_dir}/.tools/wget/bin:${PATH}"
 }
 
@@ -80,43 +80,43 @@ java_version() {
 install_java() {
   cache_dir=$1
   build_dir=$2
-  jdk_url=${3:-"http://download.oracle.com/otn-pub/java/jdk/8u5-b13/jdk-8u5-linux-x64.tar.gz"}
-  jdk_ver=${4:-"1.8.0_05"}
-  
-  if [ ! -d "${cache_dir}" ]; then error "Invalid cache directory to store JDK."; fi
-  if [ ! -d "${build_dir}" ]; then error "Invalid slug directory to install JDK."; fi
-  
-  mkdir -p "${build_dir}/.jdk"
-  
-  if [ ! -f "${cache_dir}/.jdk/bin/java" ] || [ "${jdk_ver}" != "$(java_version ${cache_dir}/.jdk/bin/)" ] ; then
+  jre_url=${3:-"http://download.oracle.com/otn-pub/java/jdk/8u11-b12/server-jre-8u11-linux-x64.tar.gz"}
+  jre_ver=${4:-"1.8.0_11"}
+
+  if [ ! -d "${cache_dir}" ]; then error "Invalid cache directory to store JRE."; fi
+  if [ ! -d "${build_dir}" ]; then error "Invalid slug directory to install JRE."; fi
+
+  mkdir -p "${build_dir}/.jre"
+
+  if [ ! -f "${cache_dir}/.jre/bin/java" ] || [ "${jre_ver}" != "$(java_version ${cache_dir}/.jre/bin/)" ] ; then
     echo -n " (downloading...)"
-    rm -rf "${cache_dir}/.jdk" && mkdir -p "${cache_dir}/.jdk"
-    wget --quiet --no-check-certificate --no-cookies --header "Cookie: oraclelicense=accept-securebackup-cookie" -O - "${jdk_url}" | tar xz -C "${cache_dir}/.jdk" --strip-components=1 
-    rm -rf "${cache_dir}/.jdk/src.zip" "${cache_dir}/.jdk/javafx-src.zip" "${cache_dir}/.jdk/db" "${cache_dir}/.jdk/man"
+    rm -rf "${cache_dir}/.jre" && mkdir -p "${cache_dir}/.jre"
+    wget --quiet --no-check-certificate --no-cookies --header "Cookie: oraclelicense=accept-securebackup-cookie" -O - "${jre_url}" | tar xz -C "${cache_dir}/.jre" --strip-components=1
+    rm -rf "${cache_dir}/.jre/src.zip" "${cache_dir}/.jre/javafx-src.zip" "${cache_dir}/.jre/db" "${cache_dir}/.jre/man"
   fi
-  cp -r "${cache_dir}/.jdk/." "${build_dir}/.jdk"
-  
-  if [ ! -f "${build_dir}/.jdk/bin/java" ]; then
+  cp -r "${cache_dir}/.jre/." "${build_dir}/.jre"
+
+  if [ ! -f "${build_dir}/.jre/bin/java" ]; then
     error "Unable to retrieve JDK."
   fi
-  
-  export JAVA_HOME="${build_dir}/.jdk"
-  export PATH="${build_dir}/.jdk/bin:${PATH}"
+
+  export JAVA_HOME="${build_dir}/.jre"
+  export PATH="${build_dir}/.jre/bin:${PATH}"
 }
 
 install_jce() {
   java_ver=$(java_version)
-  
+
   if [ ! -n "${JAVA_HOME}" ]; then error "JAVA_HOME not set, unable to install JCE."; fi
   if [ ! -d "${JAVA_HOME}" ]; then error "JAVA_HOME directory does not exist, unable to install JCE."; fi
-  
+
   if [ "${java_ver:0:3}" == "1.8" ]; then
     jce_url="http://download.oracle.com/otn-pub/java/jce/8/jce_policy-8.zip"
     jce_dir="UnlimitedJCEPolicyJDK8"
   else
     error "Unable to resolve Java version for JCE"
   fi
-  
+
   cd $(mktmpdir jce)
   wget --quiet --no-check-certificate --no-cookies --header "Cookie: oraclelicense=accept-securebackup-cookie" -O jce_policy.zip "${jce_url}"
   jar xf jce_policy.zip
