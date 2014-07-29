@@ -150,7 +150,7 @@ cp -p $OPT_DIR/$HEROKU_PLUGIN $SBT_USER_HOME/.sbt/plugins/$HEROKU_PLUGIN
 
 PROFILE_PATH="$BUILD_DIR/.profile.d/scala.sh"
 mkdir -p $(dirname $PROFILE_PATH)
-echo 'export PATH="/app/.jdk/bin:$PATH"' >> $PROFILE_PATH
+echo 'export PATH="/app/.jre/bin:$PATH"' >> $PROFILE_PATH
 
 # repack cache
 mkdir -p $CACHE_DIR
