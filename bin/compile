@@ -59,11 +59,9 @@ statusn "Installing JDK..."
 install_java $CACHE_DIR $BUILD_DIR
 log_echo " version $(java_version) installed"
 
-if [ "true" == "$JCE" ]; then
- statusn "Installing JCE Unlimited Strength..."
- install_jce
- log_echo " done"
-fi
+statusn "Installing JCE Unlimited Strength..."
+install_jce
+log_echo " done"
 
 # home directory from perspective of SBT; we rename
 # it because otherwise the project root and $HOME
