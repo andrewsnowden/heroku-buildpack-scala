@@ -80,8 +80,8 @@ java_version() {
 install_java() {
   cache_dir=$1
   build_dir=$2
-  jre_url=${3:-"http://download.oracle.com/otn-pub/java/jdk/8u11-b12/server-jre-8u11-linux-x64.tar.gz"}
-  jre_ver=${4:-"1.8.0_11"}
+  jre_url=${3:-"http://download.oracle.com/otn-pub/java/jdk/8u72-b15/server-jre-8u72-linux-x64.tar.gz"}
+  jre_ver=${4:-"1.8.0_72"}
 
   if [ ! -d "${cache_dir}" ]; then error "Invalid cache directory to store JRE."; fi
   if [ ! -d "${build_dir}" ]; then error "Invalid slug directory to install JRE."; fi
